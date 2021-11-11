@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <windows.h>
 
 using namespace std;
 
@@ -68,7 +69,34 @@ char* decrypt(char *raw) {
 }
 
 void menu() {
+    int mode;
+    string input;
     cout << "What do you want to do?\n1 = Encrypt\n2 = Decrypt" << endl;
+    cin >> mode;
+    if (mode == 1) {
+        system("cls");
+        cout << "Write what you want to encrypt" << endl;
+        cout << "Input: ";
+        cin >> input;
+        char* output = encrypt(stringToCharArray(input));
+        cout << "Encrypted output: " << output << endl;
+        Sleep(2000);
+        system("cls");
+        menu();
+    } else if (mode == 2) {
+        system("cls");
+        cout << "Write what you want to decrypt" << endl;
+        cout << "Input: ";
+        cin >> input;
+        char* output = decrypt(stringToCharArray(input));
+        cout << "Decrypted output: " << output << endl;
+        Sleep(2000);
+        system("cls");
+        menu();
+    } else {
+        system("cls");
+        menu();
+    }
 }
 
 int main() {
