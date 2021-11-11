@@ -1,29 +1,77 @@
 #include <iostream>
 #include <string>
 
+using namespace std;
+
 char availableLetters[] = {
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
         'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
 };
 
-int* stringToASCIIArray(const std::string& msg) {
-    int* array = new int[0];
-    for (int i = 0; i <= msg.length(); i++) {
-        array[i] = (unsigned char)msg[i];
+char* stringToCharArray(const string& msg) {
+    char* array = new char[0];
+    for (int i = 0; i < msg.length(); i++) {
+        array[i] = msg[i];
     }
+    array[msg.length()] = '\0';
     return array;
 }
 
-int main() {
-    std::string test;
-    std::cout << "Please write something, then press enter" << std::endl;
-    std::getline(std::cin, test);
-    std::cout << stringToASCIIArray(test) << std::endl;
-    /**char *out = std::find(std::begin(availableLetters), std::end(availableLetters), stringToASCIIArray(test)[0]);
-    if (out != std::end(availableLetters)) {
-        std::cout << stringToASCIIArray(test) << std::endl;
-    } else {
+int getCharArraySize(char *str)
+{
+    int charCnt = 0;
+    while (*str != '\0')
+    {
+        charCnt++;
+        str++;
+    }
 
-    }**/
+    return charCnt;
+}
+
+char* encrypt(char *raw) {
+    char* encrypted = new char[0];
+    for (int i = 0; i < getCharArraySize(raw); i++) {
+        char* out = find(begin(availableLetters), end(availableLetters), raw[i]);
+        if (out != end(availableLetters)) {
+            if (distance(availableLetters, out) + 3 >= getCharArraySize(availableLetters)) {
+                encrypted[i] = availableLetters[(distance(availableLetters, out) + 3) - getCharArraySize(availableLetters)];
+            } else {
+                encrypted[i] = availableLetters[distance(availableLetters, out) + 3];
+            }
+        } else {
+            cout << "Invalid char: " << raw[i] << endl;
+            exit(0);
+        }
+    }
+    encrypted[getCharArraySize(raw)] = '\0';
+    return encrypted;
+}
+
+char* decrypt(char *raw) {
+    char* decrypted = new char[0];
+    for (int i = 0; i < getCharArraySize(raw); i++) {
+        char* out = find(begin(availableLetters), end(availableLetters), raw[i]);
+        if (out != end(availableLetters)) {
+            if (distance(availableLetters, out) + 3 >= getCharArraySize(availableLetters)) {
+                decrypted[i] = availableLetters[(distance(availableLetters, out) - 3) - getCharArraySize(availableLetters)];
+            } else {
+                decrypted[i] = availableLetters[distance(availableLetters, out) - 3];
+            }
+        } else {
+            cout << "Invalid char: " << raw[i] << endl;
+            exit(0);
+        }
+    }
+    decrypted[getCharArraySize(raw)] = '\0';
+    return decrypted;
+}
+
+void menu() {
+    cout << "What do you want to do?\n1 = Encrypt\n2 = Decrypt" << endl;
+}
+
+int main() {
+    menu();
     return 0;
 }
